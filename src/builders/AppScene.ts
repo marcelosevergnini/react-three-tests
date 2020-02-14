@@ -1,11 +1,11 @@
 import {Scene, WebGLRenderer, Color, DirectionalLight, PerspectiveCamera, GridHelper} from "three";
+import { OrbitControls } from 'three-orbitcontrols-ts';
 
 class AppScene {
     scene: Scene;
     renderer: WebGLRenderer;
     camera: PerspectiveCamera;
-
-
+    controls: OrbitControls;
 
     constructor(useAntialias: boolean, color: number) {
         this.scene = new Scene();
@@ -15,7 +15,9 @@ class AppScene {
         this.renderer.setSize(0, 0, false);
         this.camera.position.set( 500, 800, 1300 );
         this.camera.lookAt( 0, 0, 0 );
-    }
+        this.controls = new OrbitControls(this.camera);
+        this.controls.addEventListener( 'change', this.updateControls);
+    };
 
     updateRenderSize = (width: number, height: number, updateStyle: boolean ) => {
         this.renderer.setSize(width, height, updateStyle);
@@ -23,7 +25,7 @@ class AppScene {
         this.camera.updateProjectionMatrix();
     };
 
-    addLights = (lights: [{color: number, position : { x: number, y: number, z: number}}]) => {
+    addLights = (lights: {color: number, position : { x: number, y: number, z: number}}[]) => {
         lights.forEach((light: {color: number, position : { x: number, y: number, z: number}}) => {
             let directionalLight = new DirectionalLight( new Color(light.color));
             directionalLight.position.set(light.position.x, light.position.y , light.position.z).normalize();
@@ -39,8 +41,12 @@ class AppScene {
         this.scene.add(elementToAdd);
     };
 
+    updateControls = () => {
+        this.renderer.render( this.scene,  this.camera);
+    };
+
     render = () => {
         this.renderer.render( this.scene, this.camera );
-    }
+    };
 }
 export default AppScene;
