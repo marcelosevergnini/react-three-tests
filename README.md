@@ -1,4 +1,4 @@
-#React + ThreeJs Tests
+# React + ThreeJs Tests
 
 [Demo Click Here](https://marcelosevergnini.github.io/react-three-tests/)
  
